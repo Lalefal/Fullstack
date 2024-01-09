@@ -6,27 +6,28 @@ const Header = (props) => {
         {props.course}
       </h1>
     </>
+    
+    
   )
 }
 
 const Part = (props) => {
-  console.log("Part: props.part.name ja props.part.exercises: " + props.name + " ja " + props.exercises)
+  console.log("Part: props.part.name ja props.part.exercises: " + props.part.name + " ja " + props.part.exercises)
     return (
     <> 
-      <p>{props.name} {props.exercises}</p>
+    <p> {props.part.name} {props.part.exercises} </p>
     </>
   )
 }
 
 
 const Content = (props) => {
-  console.log("Content props: " + props.part1 + " ja " + props.exerc1 )
+  console.log("Content props (props.parts): " + props.parts)
   return (
     <div>
-      <Part name={props.part1} exercises={props.exerc1} />
-      <Part name={props.part2} exercises={props.exerc2} />
-      <Part name={props.part3} exercises={props.exerc3} />
-
+      <Part part={props.parts[0]}/>
+      <Part part={props.parts[1]}/>
+      <Part part={props.parts[2]}/>
     </div>
   )
 }
@@ -35,7 +36,7 @@ const Total = (props) => {
   console.log("Total props: " + props)
   return (
     <div>
-       <p>Number of exercises {props.exerc1 + props.exerc2 + props.exerc3}</p>
+      <p>Number of exercises {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises} </p>
     </div>
   )
 }
@@ -43,17 +44,25 @@ const Total = (props) => {
 
 const App = () => {
   const course = 'Half Stack application development'
-  const part1 = 'Fundamentals of React'
-  const exercises1 = 10
-  const part2 = 'Using props to pass data'
-  const exercises2 = 7
-  const part3 = 'State of a component'
-  const exercises3 = 14
+  const parts = [
+    {
+      name: 'Fundamentals of React',
+      exercises: 10
+    },
+    {
+      name: 'Using props to pass data',
+      exercises: 7
+    },
+    {
+      name: 'State of a component',
+      exercises: 14
+    }
+  ]
   return (
     <div>
       <Header course={course} />
-      <Content part1={part1} exerc1={exercises1} part2={part2} exerc2={exercises2} part3={part3} exerc3={exercises3}/>
-      <Total exerc1={exercises1} exerc2={exercises2} exerc3={exercises3}/>
+      <Content parts={parts}/>
+      <Total parts={parts}/> 
     </div>
   )
 }
