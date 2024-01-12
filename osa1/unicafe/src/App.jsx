@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
 const Button = (props) => {
-  console.log('nappi props', props)
   const { kasittele, teksti } = props
   return (
     <button onClick={kasittele}> {teksti} </button>
@@ -14,17 +13,34 @@ const Otsikko = ({text}) => {
   )
 }
 
-const Statistics  = ({text, value, text2}) => {
-  return (
-    <p>{text} {value} {text2}</p>
-  )
-}
 // const Statistics  = (props) => {
 //   const { text, value, text2 } = props
 //   return (
 //     <p>{text} {value} {text2}</p>
 //   )
 // }
+
+const StatisticsLine  = ({text, value, text2}) => {
+  return (
+    <p>{text} {value} {text2}</p>
+  )
+}
+
+
+const Statistics = (props) => {
+  const {good, neutral, bad, total, average, positive } = props
+  return (
+    <div> 
+    <StatisticsLine text='Good' value={good} />
+    <StatisticsLine text='Neutral' value={neutral} />
+    <StatisticsLine text='Bad' value={bad} />
+    <StatisticsLine text='All' value={total} />
+    <StatisticsLine text='Average' value={average}/>
+    <StatisticsLine text='Positive' value={positive.toFixed(2)} text2='%' />
+  </div>
+  )
+}
+
 
 const History = (props) => {
   const { totalClicks, good, neutral, bad, total, average, positive } = props;
@@ -34,14 +50,9 @@ const History = (props) => {
     )
   }
   return (
-    <div> 
-      <Statistics text='Good' value={good} />
-      <Statistics text='Neutral' value={neutral} />
-      <Statistics text='Bad' value={bad} />
-      <Statistics text='All' value={total} />
-      <Statistics text='Average' value={average}/>
-      <Statistics text='Positive' value={positive.toFixed(2)} text2='%' />
-    </div>
+    <>
+    <Statistics good={good} neutral={neutral} bad={bad} total={total} average={average} positive= {positive}/>
+    </>
   )
 }
 
@@ -81,6 +92,10 @@ const App = () => {
       <Button kasittele={badClick} teksti='Bad' />
       <Otsikko text='Statistics' />
       <History totalClicks={total} good={good} neutral={neutral} bad={bad} total={total} average={average} positive= {positive} />
+      
+      {/* Tämä toimii
+      <Statistics good={good} neutral={neutral} bad={bad} total={total} average={average} positive= {positive}/>
+  */}
 
       {/* <Statistics text='Neutral' value={neutral} />
       <Statistics text='Bad' value={bad} />
