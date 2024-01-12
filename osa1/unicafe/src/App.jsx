@@ -13,34 +13,30 @@ const Otsikko = ({text}) => {
   )
 }
 
-// const Statistics  = (props) => {
-//   const { text, value, text2 } = props
-//   return (
-//     <p>{text} {value} {text2}</p>
-//   )
-// }
-
 const StatisticsLine  = ({text, value, text2}) => {
   return (
-    <p>{text} {value} {text2}</p>
+    <tr>
+      <td> {text} </td>
+      <td> {value} {text2} </td>
+      </tr>
   )
 }
-
 
 const Statistics = (props) => {
   const {good, neutral, bad, total, average, positive } = props
   return (
-    <div> 
+    <table>
+     <tbody>
     <StatisticsLine text='Good' value={good} />
     <StatisticsLine text='Neutral' value={neutral} />
     <StatisticsLine text='Bad' value={bad} />
     <StatisticsLine text='All' value={total} />
-    <StatisticsLine text='Average' value={average}/>
-    <StatisticsLine text='Positive' value={positive.toFixed(2)} text2='%' />
-  </div>
+    <StatisticsLine text='Average' value={average.toFixed(1)}/>
+    <StatisticsLine text='Positive' value={positive.toFixed(1)} text2='%' />
+    </tbody>
+    </table>
   )
 }
-
 
 const History = (props) => {
   const { totalClicks, good, neutral, bad, total, average, positive } = props;
@@ -50,12 +46,9 @@ const History = (props) => {
     )
   }
   return (
-    <>
     <Statistics good={good} neutral={neutral} bad={bad} total={total} average={average} positive= {positive}/>
-    </>
   )
 }
-
 
 const App = () => {
   const [good, setGood] = useState(0)
@@ -66,7 +59,6 @@ const App = () => {
   const average = total > 0 ? points / total : 0;
   const positive = total > 0 ? good / total * 100 : 0;
  
-
   const goodClick = () => {
     setGood(good + 1)
     setTotal(total + 1)
@@ -92,16 +84,6 @@ const App = () => {
       <Button kasittele={badClick} teksti='Bad' />
       <Otsikko text='Statistics' />
       <History totalClicks={total} good={good} neutral={neutral} bad={bad} total={total} average={average} positive= {positive} />
-      
-      {/* Tämä toimii
-      <Statistics good={good} neutral={neutral} bad={bad} total={total} average={average} positive= {positive}/>
-  */}
-
-      {/* <Statistics text='Neutral' value={neutral} />
-      <Statistics text='Bad' value={bad} />
-      <Statistics text='All' value={total} />
-      <Statistics text='Average' value={average}/>
-      <Statistics text='Positive' value={positive.toFixed(2)} text2='%' /> */}
 
     </div>
   )
