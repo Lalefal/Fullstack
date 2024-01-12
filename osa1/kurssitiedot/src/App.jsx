@@ -6,8 +6,6 @@ const Header = (props) => {
         {props.course.name}
       </h1>
     </>
-    
-    
   )
 }
 
