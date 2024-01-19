@@ -2,6 +2,8 @@ import { useState } from 'react'
 
 const Button = (props) => {
   const { kasittele, teksti } = props
+  
+  
   return (
     <button onClick={kasittele}> {teksti} </button>
   )
@@ -16,6 +18,7 @@ const Texts = ({text, value, text2}) => {
 const Title = ({text}) => {
   return(
     <h2> {text} </h2>
+    
   )
 }
 
