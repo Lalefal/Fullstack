@@ -1,13 +1,3 @@
-const Total = (props) => {
-  console.log("Total props: ", props)
-  return (
-    <div>
-      <p>Number of exercises {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises} </p>
-    </div>
-  )
-}
-
-
 
 
 const Header = (props) => {
@@ -26,7 +16,9 @@ const Part = (props) => {
     
   return (
     <> 
-    <p> {props.part.name} {props.part.exercises} </p>
+      <p> 
+        {props.part.name} {props.part.exercises} 
+      </p>
     </>
   )
 }
@@ -68,9 +60,23 @@ const Content = ({ parts }) => {
     <div>
       <Header course={course} />
       <Content parts={course.parts}/> 
+      <Total course={course} />
     </div>
   )
 }
+
+const Total = ({ course }) => {
+  const total = course.parts.reduce((sum, part) => sum + part.exercises, 0);
+  console.log("Total: ", total)
+  return (
+    <>
+      <h4>
+        Total of {total} exercises 
+      </h4>
+    </>
+  )
+}
+
 
 const App = () => {
   const course = {
@@ -100,9 +106,12 @@ const App = () => {
     ]
   }
 
+  
+
   return (
     <div>
       <Course course={course} />
+      
     </div>
   )
 }
