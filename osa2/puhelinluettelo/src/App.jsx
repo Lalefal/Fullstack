@@ -1,4 +1,6 @@
 //step1, henkilön lisäys luetteloon
+//voit käyttää kentän key arvona henkilön nimeä
+//step2, jo olemassa olevan nimen lisäyksen esto, virheilmo alert
 
 import { useState } from "react"
 
@@ -16,10 +18,20 @@ const App = () => {
     event.preventDefault()
     const nameObject = {
       name: newName,
-     // id: persons.length + 1,
+      // id: persons.length + 1,
     }
-    setPersons(persons.concat(nameObject))
-    setNewName("")
+    const nameExists = persons.some((person) => person.name === newName)
+    nameExists
+      ? alert(`${newName} is already added to phonebook`) //console.log("Varattu", newName)
+      : setPersons(persons.concat(nameObject)), //setPersons([...persons, nameObject])
+      setNewName("")
+
+    // if (!persons.some(person => person.name === newName)) {
+    //   setPersons(persons.concat(nameObject))
+    //   setNewName("")
+    // } else {
+    //   console.log('Varattu', newName)
+    // }
   }
 
   const handleNameChange = (event) => {
