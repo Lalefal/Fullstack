@@ -19,7 +19,6 @@ const App = () => {
   const [showAll, setShowAll] = useState(true)
 
   const addName = (event) => {
-    //button submit
     event.preventDefault()
     const nameObject = {
       name: newName,
@@ -50,7 +49,7 @@ const App = () => {
   const handleFilterPersons = (event) => {
     const inputLenght = event.target.value
     setFilterPersons(event.target.value)
-    setShowAll(inputLenght === 0) //vaihtaa true/false sen mukaan, onko fieldissä sisältöä
+    setShowAll(inputLenght.length === 0) //vaihtaa true/false sen mukaan, onko fieldissä sisältöä
   }
 
   const personsToShow = showAll
