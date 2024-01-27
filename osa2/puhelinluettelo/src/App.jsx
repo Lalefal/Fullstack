@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import axios from "axios"
 import Persons from "./components/Persons"
 import PersonForm from "./components/PersonForm"
 import FilterForm from "./components/FilterForm"
@@ -9,6 +10,12 @@ const App = () => {
   const [newNo, setNewNo] = useState("")
   const [filterPersons, setFilterPersons] = useState("")
   const [showAll, setShowAll] = useState(true)
+
+  useEffect(() => {
+    axios.get("http://localhost:3001/persons").then((response) => {
+      setPersons(response.data)
+    })
+  }, [])
 
   const addName = (event) => {
     event.preventDefault()
@@ -71,6 +78,8 @@ export default App
 //step3, 2.8 puhelinnumeron lisäys
 //step4, 2.9 hakukenttä
 //step5, 2.10 refaktorointi, erota sovelluksesta 3 komponenttia
+
+//step6, 2.11 sovelluksen alkutila tiedostoon, haku palvelimelta
 
 // if (!persons.some(person => person.name === newName)) {
 //   setPersons(persons.concat(nameObject))
