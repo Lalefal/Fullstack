@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react"
-import axios from "axios"
 import Persons from "./components/Persons"
 import PersonForm from "./components/PersonForm"
 import FilterForm from "./components/FilterForm"
+import personService from "./services/persons"
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -12,34 +12,35 @@ const App = () => {
   const [showAll, setShowAll] = useState(true)
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((response) => {
-      setPersons(response.data)
+    personService.getAll().then(initialData => {
+      setPersons(initialData)
     })
   }, [])
 
-  const addName = (event) => {
+  const addName = event => {
     event.preventDefault()
     const nameObject = {
       name: newName,
       number: newNo,
     }
-    const newNameExists = persons.some((person) => person.name === newName)
+    const newNameExists = persons.some(person => person.name === newName)
     newNameExists
       ? alert(`${newName} is already added to phonebook`)
-      : setPersons(persons.concat(nameObject)), //setPersons([...persons, nameObject])
-      setNewName(""),
-      setNewNo("")
+      : personService.create(nameObject).then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNewName(""), setNewNo("")
+        })
   }
 
-  const handleNameChange = (event) => {
+  const handleNameChange = event => {
     setNewName(event.target.value)
   }
 
-  const handleNumberChange = (event) => {
+  const handleNumberChange = event => {
     setNewNo(event.target.value)
   }
 
-  const handleFilterPersons = (event) => {
+  const handleFilterPersons = event => {
     const inputLenght = event.target.value
     setFilterPersons(event.target.value)
     setShowAll(inputLenght.length === 0) //vaihtaa true/false sen mukaan, onko fieldissä sisältöä
@@ -47,7 +48,7 @@ const App = () => {
 
   const personsToShow = showAll
     ? persons
-    : persons.filter((person) =>
+    : persons.filter(person =>
         person.name.toLowerCase().includes(filterPersons.toLowerCase())
       )
 
@@ -80,6 +81,8 @@ export default App
 //step5, 2.10 refaktorointi, erota sovelluksesta 3 komponenttia
 
 //step6, 2.11 sovelluksen alkutila tiedostoon, haku palvelimelta
+//step7, 2.12 sykronoi luetteloon lisättävät numerot palvelimelle
+//step8, 2.13 siirrä server-kommunikointi omaan moduuliin
 
 // if (!persons.some(person => person.name === newName)) {
 //   setPersons(persons.concat(nameObject))
@@ -87,8 +90,3 @@ export default App
 // } else {
 //   console.log('Varattu', newName)
 // }
-
-// { name: "Arto Hellas", number: "040-123456" },
-// { name: "Ada Lovelace", number: "39-44-5323523" },
-// { name: "Dan Abramov", number: "12-43-234345" },
-// { name: "Mary Poppendieck", number: "39-23-6423122" },
