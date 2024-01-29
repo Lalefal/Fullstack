@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import Persons from "./components/Persons"
+import OnePersonRow from "./components/Persons"
 import PersonForm from "./components/PersonForm"
 import FilterForm from "./components/FilterForm"
 import personService from "./services/persons"
@@ -32,6 +32,19 @@ const App = () => {
         })
   }
 
+  const removePerson = person => {
+    window.confirm(`Delete ${person.name}?`) &&
+      personService.remove(person.id).then(response => {
+        setPersons(persons.filter(p => p.id !== person.id))
+      })
+  }
+  //   if (window.confirm(`Remove ${id}`)) {
+  //     personService.remove(id).then(response => {
+  //       setPersons(persons.filter(person => person.id !== id))
+  //     })
+  //   }
+  // }
+
   const handleNameChange = event => {
     setNewName(event.target.value)
   }
@@ -52,11 +65,11 @@ const App = () => {
         person.name.toLowerCase().includes(filterPersons.toLowerCase())
       )
 
+
   return (
     <div>
       <h2>Phonebook</h2>
       <FilterForm value={filterPersons} onChange={handleFilterPersons} />
-
       <h3>Add a new</h3>
       <PersonForm
         onSubmit={addName}
@@ -65,12 +78,23 @@ const App = () => {
         numberValue={newNo}
         onNumberChange={handleNumberChange}
       />
-
       <h3>Numbers</h3>
-      <Persons tama={personsToShow} />
+      <table>
+        <tbody>
+          {persons.map(person => (
+            <OnePersonRow
+              key={person.id}
+              nimi={person.name}
+              nro={person.number}
+              onClick={() => removePerson(person)}
+            />
+          ))}
+        </tbody>
+      </table>
     </div>
   )
 }
+//() => removePerson(persons.id)
 
 export default App
 
@@ -83,6 +107,7 @@ export default App
 //step6, 2.11 sovelluksen alkutila tiedostoon, haku palvelimelta
 //step7, 2.12 sykronoi luetteloon lisättävät numerot palvelimelle
 //step8, 2.13 siirrä server-kommunikointi omaan moduuliin
+//step9, 2.14 yhteystietojen poistaminen
 
 // if (!persons.some(person => person.name === newName)) {
 //   setPersons(persons.concat(nameObject))
