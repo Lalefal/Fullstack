@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import OnePersonRow from "./components/Persons"
 import PersonForm from "./components/PersonForm"
 import FilterForm from "./components/FilterForm"
+import Notification from "./components/Notification"
 import personService from "./services/persons"
 
 const App = () => {
@@ -10,6 +11,14 @@ const App = () => {
   const [newNo, setNewNo] = useState("")
   const [filterPersons, setFilterPersons] = useState("")
   const [showAll, setShowAll] = useState(true)
+  const [msg, setMsg] = useState(null)
+
+  const handleNotification = (message, color) => {
+    setMsg({ message, color })
+    setTimeout(() => {
+      setMsg(null)
+    }, 3000)
+  }
 
   useEffect(() => {
     personService.getAll().then(initialData => {
@@ -41,6 +50,19 @@ const App = () => {
               )
               setNewName("")
               setNewNo("")
+              handleNotification(`Changed number for ${newName}`, {
+                text: "green",
+                border: "green",
+              })
+            })
+            .catch(error => {
+              handleNotification(
+                `Information of ${newName} has already been removed from server`,
+                {
+                  text: "red",
+                  border: "red",
+                }
+              )
             })
         })()
       : !NameExists
@@ -48,15 +70,34 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNewName("")
           setNewNo("")
+          handleNotification(`Added ${newName}`, {
+            text: "green",
+            border: "green",
+          })
         })
       : null
   }
 
   const removePerson = person => {
     window.confirm(`Delete ${person.name}?`) &&
-      personService.remove(person.id).then(response => {
-        setPersons(persons.filter(p => p.id !== person.id))
-      })
+      personService
+        .remove(person.id)
+        .then(response => {
+          setPersons(persons.filter(p => p.id !== person.id))
+          handleNotification(`Deleted ${person.name}`, {
+            text: "green",
+            border: "green",
+          })
+        })
+        .catch(error => {
+          handleNotification(
+            `Information of ${newName} has already been removed from server`,
+            {
+              text: "red",
+              border: "red",
+            }
+          )
+        })
   }
 
   const handleNameChange = event => {
@@ -82,6 +123,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={msg && msg.message} color={msg && msg.color} />
       <FilterForm value={filterPersons} onChange={handleFilterPersons} />
       <h3>Add a new</h3>
       <PersonForm
@@ -121,6 +163,13 @@ export default App
 //step8, 2.13 siirrä server-kommunikointi omaan moduuliin
 //step9, 2.14 yhteystietojen poistaminen
 //step10, 2.15 tallennetun numeron korvaaminen
+//step12, 2.17 epäonnistuneen operaation ilmoitus eri värillä
+// setMsg(`Added ${newName}`)
+// setTimeout(() => {
+//   setMsg(null)
+// }, 3000)
+
+//step11, 2.16 parempi virheilmoitus
 
 // if (!persons.some(person => person.name === newName)) {
 //   setPersons(persons.concat(nameObject))

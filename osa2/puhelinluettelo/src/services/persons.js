@@ -17,9 +17,10 @@ const remove = id => {
     .then(response => {
       console.log(`Removed person with id ${id}`)
     })
-    .catch(error => {
-      console.error(error)
-    })
+    // .catch(error => {
+    //   console.error(error)
+    // })
+
 }
 
 const update = (id, newObject) => {
