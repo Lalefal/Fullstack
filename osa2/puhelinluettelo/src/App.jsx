@@ -23,13 +23,33 @@ const App = () => {
       name: newName,
       number: newNo,
     }
-    const newNameExists = persons.some(person => person.name === newName)
-    newNameExists
-      ? alert(`${newName} is already added to phonebook`)
-      : personService.create(nameObject).then(returnedPerson => {
+    const NameExists = persons.find(person => person.name === newName)
+
+    NameExists &&
+    window.confirm(
+      `${newName} is already added to phonebook, replace the old number with a new one?`
+    )
+      ? (() => {
+          const changedNumber = { ...NameExists, number: newNo }
+          personService
+            .update(NameExists.id, changedNumber)
+            .then(returnedPerson => {
+              setPersons(
+                persons.map(person =>
+                  person.id !== NameExists.id ? person : returnedPerson
+                )
+              )
+              setNewName("")
+              setNewNo("")
+            })
+        })()
+      : !NameExists
+      ? personService.create(nameObject).then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
-          setNewName(""), setNewNo("")
+          setNewName("")
+          setNewNo("")
         })
+      : null
   }
 
   const removePerson = person => {
@@ -38,12 +58,6 @@ const App = () => {
         setPersons(persons.filter(p => p.id !== person.id))
       })
   }
-  //   if (window.confirm(`Remove ${id}`)) {
-  //     personService.remove(id).then(response => {
-  //       setPersons(persons.filter(person => person.id !== id))
-  //     })
-  //   }
-  // }
 
   const handleNameChange = event => {
     setNewName(event.target.value)
@@ -65,7 +79,6 @@ const App = () => {
         person.name.toLowerCase().includes(filterPersons.toLowerCase())
       )
 
-
   return (
     <div>
       <h2>Phonebook</h2>
@@ -81,7 +94,7 @@ const App = () => {
       <h3>Numbers</h3>
       <table>
         <tbody>
-          {persons.map(person => (
+          {personsToShow.map(person => (
             <OnePersonRow
               key={person.id}
               nimi={person.name}
@@ -94,7 +107,6 @@ const App = () => {
     </div>
   )
 }
-//() => removePerson(persons.id)
 
 export default App
 
@@ -108,10 +120,36 @@ export default App
 //step7, 2.12 sykronoi luetteloon lisättävät numerot palvelimelle
 //step8, 2.13 siirrä server-kommunikointi omaan moduuliin
 //step9, 2.14 yhteystietojen poistaminen
+//step10, 2.15 tallennetun numeron korvaaminen
 
 // if (!persons.some(person => person.name === newName)) {
 //   setPersons(persons.concat(nameObject))
 //   setNewName("")
 // } else {
 //   console.log('Varattu', newName)
+// }
+
+// {
+//   "persons":[
+//     {
+//       "name": "Arto Hellas",
+//       "number": "040-123456",
+//       "id": 1
+//     },
+//     {
+//       "name": "Ada Lovelace",
+//       "number": "39-44-5323523",
+//       "id": 2
+//     },
+//     {
+//       "name": "Dan Abramov",
+//       "number": "12-43-234345",
+//       "id": 3
+//     },
+//     {
+//       "name": "Mary Poppendieck",
+//       "number": "39-23-6423122",
+//       "id": 4
+//     }
+//   ]
 // }
