@@ -163,13 +163,12 @@ export default App
 //step8, 2.13 siirrä server-kommunikointi omaan moduuliin
 //step9, 2.14 yhteystietojen poistaminen
 //step10, 2.15 tallennetun numeron korvaaminen
+//step11, 2.16 parempi virheilmoitus
 //step12, 2.17 epäonnistuneen operaation ilmoitus eri värillä
 // setMsg(`Added ${newName}`)
 // setTimeout(() => {
 //   setMsg(null)
 // }, 3000)
-
-//step11, 2.16 parempi virheilmoitus
 
 // if (!persons.some(person => person.name === newName)) {
 //   setPersons(persons.concat(nameObject))
